@@ -120,8 +120,8 @@ function MaterialForm() {
 
     const RawMaterialCheckbox = ({ material }) => {
         return <div className="raw-materials-checklist-item">
-            <p>{material.name}</p>
-            <input type="checkbox" onChange={() => handleMaterialCheck(material.name)} checked={materialsList[material.name]}/>
+            <p>{material}</p>
+            <input type="checkbox" onChange={() => handleMaterialCheck(material)} checked={materialsList[material]}/>
         </div>
     }
     
