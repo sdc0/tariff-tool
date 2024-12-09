@@ -70,6 +70,7 @@ function MaterialForm() {
     
         console.log(`Successfully added material ${material} to country ${selectedCountry}`);
         console.log(raw_materials);
+        console.log(countries);
         form.reset();
         setSelectedCountry("");
     }
@@ -97,6 +98,7 @@ function MaterialForm() {
         processed ? material_elem.removeCountry(selectedCountry) : material_elem.removeCountry(selectedCountry);
         console.log(`Successfully removed material ${material} from country ${selectedCountry}`);
         console.log(raw_materials);
+        console.log(countries);
         form.reset();
         setSelectedCountry("");
     }

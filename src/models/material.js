@@ -1,3 +1,5 @@
+import { countries } from "./country.js";
+
 export class RawMaterial {
     constructor(name) {
         this.name = name;
@@ -8,11 +10,15 @@ export class RawMaterial {
     addCountry(country_name, harvest_price, sell_prices) {
         this.harvest_prices[country_name] = harvest_price;
         this.sell_prices[country_name] = sell_prices;
+
+        countries.find(c => c.name === country_name)?.addRawMaterial(this.name);
     }
 
     removeCountry(country_name) {
         delete this.harvest_prices[country_name];
         delete this.sell_prices[country_name];
+
+        countries.find(c => c.name === country_name)?.removeRawMaterial(this.name);
     }
 }
 
@@ -25,10 +31,14 @@ export class ProcessedMaterial {
 
     addCountry(country_name, sell_prices) {
         this.sell_prices[country_name] = sell_prices;
+
+        countries.find(c => c.name === country_name)?.addProcessedMaterial(this.name);
     }
 
     removeCountry(country_name) {
         delete this.sell_prices[country_name];
+
+        countries.find(c => c.name === country_name)?.removeProcessedMaterial(this.name);
     }
 }
 
