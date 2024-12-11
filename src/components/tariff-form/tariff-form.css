@@ -1,0 +1,87 @@
+.tariff-form {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid, black;
+    border-radius: 10px;
+    width: calc(100vw - 2vw - 2px);
+    padding: 0;
+    margin: 1vh 1vw;
+}
+
+.form-body {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.country-select {
+    display: flex;
+    width: 100%;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+    padding: 1% 2%;
+}
+
+.country-select-label {
+    width: 33%;
+    margin: 0;
+    padding-right: 2%;
+}
+
+.country-select-box {
+    width: 67%;
+    padding-left: 1% 2%;
+}
+
+.country-select-box select {
+    width: 100%;
+}
+
+.material-select {
+    display: flex;
+    width: 100%;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+    padding: 2%;
+}
+
+.material-select-label {
+    width: 33%;
+    margin: 0;
+    padding-right: 2%;
+}
+
+.material-select-box {
+    width: 67%;
+    padding-left: 2%;
+}
+
+.material-select-box select {
+    width: 100%;
+}
+
+.tariff-input {
+    width: 100%;
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 1% 2%;
+}
+
+.form-submit {
+    width: 100%;
+    display: flex;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid black;
+}
+
+.submit-btn {
+    margin: 5px 2%;
+}

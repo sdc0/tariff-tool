@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import { Country, countries } from "../../models/country.js";
+import { countries } from "../../models/country.js";
 import { RawMaterial, ProcessedMaterial, raw_materials, processed_materials } from "../../models/material.js";
 
 import './material-form.css';
@@ -119,10 +119,12 @@ function MaterialForm() {
     }
 
     const RawMaterialCheckbox = ({ material }) => {
-        return <div className="raw-materials-checklist-item">
-            <p>{material}</p>
-            <input type="checkbox" onChange={() => handleMaterialCheck(material)} checked={materialsList[material]}/>
-        </div>
+        return (
+            <div className="raw-materials-checklist-item">
+                <p>{material}</p>
+                <input type="checkbox" onChange={() => handleMaterialCheck(material)} checked={materialsList[material]}/>
+            </div>
+        );
     }
     
     const handleCheck = () => setProcessed(!processed);
@@ -162,12 +164,14 @@ function MaterialForm() {
             <div id="country-list-material" className="country-list">
                 {
                     countriesList.map((c, i) => {
-                        return <div key={c.name} data-country={c.name} className="country-sell-price" style={{borderLeft: ((i === 0) ? "0" : "1px solid black")}}>
-                            <p className="sell-price-country">{c.name}</p>
-                            <div className="sell-price-input">
-                                <input className="sell-price-input-box" type="text" placeholder='Selling price' />
+                        return (
+                            <div key={c.name} data-country={c.name} className="country-sell-price" style={{borderLeft: ((i === 0) ? "0" : "1px solid black")}}>
+                                <p className="sell-price-country">{c.name}</p>
+                                <div className="sell-price-input">
+                                    <input className="sell-price-input-box" type="text" placeholder='Selling price' />
+                                </div>
                             </div>
-                        </div>
+                        );
                     })
                 }
             </div>
