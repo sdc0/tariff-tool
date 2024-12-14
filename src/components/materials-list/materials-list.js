@@ -30,7 +30,10 @@ function MaterialsList() {
     }, [processedMaterials]);
 
     return (
-        <div className="material-list" style={Object.entries(rawList).length > 0 ? { border: "1px solid black" } : {}}>
+        <div className="material-list">
+            <div className={Object.entries(rawList).length > 0 ? "center bottom-border" : "center"}>
+                <h2>Materials</h2>
+            </div>
             {
                 Object.entries(rawList).map(([key, value], index) => {
                     return (

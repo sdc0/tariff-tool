@@ -16,6 +16,18 @@
     border-top: 1px solid black;
 }
 
+.center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.center h2 {
+    margin: 0;
+    padding: 0;
+}
+
 .hidden {
     display: none;
 }
@@ -23,6 +35,7 @@
 .material-list {
     display: flex;
     flex-wrap: wrap;
+    border: 1px solid black;
     border-radius: 10px;
     width: calc(50vw - 2vw - 2px);
     margin: 1vh 1vw;
