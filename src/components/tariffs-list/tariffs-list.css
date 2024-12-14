@@ -32,7 +32,7 @@
     display: none;
 }
 
-.material-list {
+.tariff-list {
     display: flex;
     flex-wrap: wrap;
     border: 1px solid black;
@@ -42,14 +42,14 @@
     margin: 1vh 1vw;
 }
 
-.material {
+.tariff {
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
     width: 100%;
 }
 
-.country-material {
+.tariff-material {
     display: inline-flex;
     width: 100%;
     margin-left: 10%;

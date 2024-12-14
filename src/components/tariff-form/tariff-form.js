@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 
 import { countries } from "../../models/country.js";
 import { RawMaterialsContext, ProcessedMaterialsContext } from "../../models/material.js";
-import { Tariff, tariffs } from "../../models/tariff.js";
+import { Tariff, TariffsContext } from "../../models/tariff.js";
 
 import './tariff-form.css';
 
@@ -11,6 +11,8 @@ function TariffForm() {
     const {rawMaterials, setRawMaterials} = useContext(RawMaterialsContext);
     // eslint-disable-next-line
     const {processedMaterials, setProcessedMaterials} = useContext(ProcessedMaterialsContext);
+    const {tariffs, setTariffs} = useContext(TariffsContext);
+
     const [targetCountry, setTargetCountry] = useState("");
     const [sourceCountry, setSourceCountry] = useState("");
     const [selectedMaterial, setSelectedMaterial] = useState("");
@@ -56,12 +58,24 @@ function TariffForm() {
         }
 
         let tariff = tariffs.find(t => (t.target === targetCountry && t.source === sourceCountry));
+        let list;
         if (tariff === undefined) {
             tariff = new Tariff(sourceCountry, targetCountry);
             tariff.addTariff(selectedMaterial, tariff_percent);
-            tariffs.push(tariff);
+
+            list = [...tariffs];
+            list.push(tariff);
+            setTariffs(list);
         }else {
-            tariff.addTariff(selectedMaterial, tariff_percent);
+            let index = tariffs.findIndex(t => (t.target === targetCountry && t.source === sourceCountry));
+
+            let t = Tariff.clone(tariff);
+            t.addTariff(selectedMaterial, tariff_percent);
+
+            list = [...tariffs];
+            list[index] = t;
+
+            setTariffs(list);
         }
 
         console.log(tariffs);
@@ -92,10 +106,19 @@ function TariffForm() {
         }
 
         let tariff = tariffs.find(t => (t.target === targetCountry && t.source === sourceCountry));
+        let list;
         if (tariff === undefined) {
             alert("Tariff does not exist");
         }else {
-            tariff.removeTariff(selectedMaterial);
+            let index = tariffs.findIndex(t => (t.target === targetCountry && t.source === sourceCountry));
+
+            let t = Tariff.clone(tariff);
+            t.removeTariff(selectedMaterial);
+
+            list = [...tariffs];
+            list[index] = t;
+
+            setTariffs(list);
         }
 
         console.log(tariffs);

@@ -26,6 +26,7 @@ export class RawMaterial {
     static clone(material) {
         let m = new RawMaterial(material.name);
 
+        // eslint-disable-next-line
         Object.entries(material.harvest_prices).map(([key, value]) => {
             m.addCountry(key, value, material.sell_prices[key]);
         });
@@ -69,6 +70,7 @@ export class ProcessedMaterial {
     static clone(material) {
         let m = new ProcessedMaterial(material.name);
         
+        // eslint-disable-next-line
         Object.entries(material.sell_prices).map(([key, value]) => {
             m.addCountry(key, value);
         });

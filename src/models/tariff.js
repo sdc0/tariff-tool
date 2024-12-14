@@ -1,3 +1,5 @@
+import { createContext, useState } from "react";
+
 export class Tariff {
     constructor(source_country_name, target_country_name) {
         this.source = source_country_name;
@@ -12,6 +14,27 @@ export class Tariff {
     removeTariff(material_name) {
         delete this.tariffs[material_name];
     }
+
+    static clone(tariff) {
+        let t = new Tariff(tariff.source, tariff.target);
+
+        // eslint-disable-next-line
+        Object.entries(tariff.tariffs).map(([key, value]) => {
+            t.addTariff(key, value);
+        });
+
+        return t;
+    }
 }
 
-export const tariffs = [];
+export const TariffsContext = createContext();
+
+export const TariffsProvider = ({ children }) => {
+    const [tariffs, setTariffs] = useState([]);
+
+    return (
+        <TariffsContext.Provider value={{ tariffs, setTariffs }}>
+            {children}
+        </TariffsContext.Provider>
+    );
+}
