@@ -65,7 +65,17 @@ function MaterialForm() {
                 list = [...processedMaterials];
                 list.push(m);
                 setProcessedMaterials(list);
-            }else material_elem.addCountry(country_elem.name, sell_prices);
+            }else {
+                let index = processedMaterials.findIndex(m => m.name === material);
+
+                m = ProcessedMaterial.clone(material_elem);
+                m.addCountry(country_elem.name, sell_prices);
+
+                list = [...processedMaterials];
+                list[index] = m;
+                
+                setProcessedMaterials(list);
+            }
         }else {
             if (material_elem === undefined) {
                 m = new RawMaterial(material);
@@ -74,7 +84,17 @@ function MaterialForm() {
                 list = [...rawMaterials];
                 list.push(m);
                 setRawMaterials(list);
-            }else material_elem.addCountry(country_elem.name, harvest_price, sell_prices);
+            }else {
+                let index = rawMaterials.findIndex(m => m.name === material);
+
+                m = RawMaterial.clone(material_elem);
+                m.addCountry(country_elem.name, harvest_price, sell_prices);
+
+                list = [...rawMaterials];
+                list[index] = m;
+                
+                setRawMaterials(list);
+            }
         }
     
         console.log(`Successfully added material ${material} to country ${selectedCountry}`);

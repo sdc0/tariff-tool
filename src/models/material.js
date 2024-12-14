@@ -22,6 +22,16 @@ export class RawMaterial {
 
         countries.find(c => c.name === country_name)?.removeRawMaterial(this.name);
     }
+
+    static clone(material) {
+        let m = new RawMaterial(material.name);
+
+        Object.entries(material.harvest_prices).map(([key, value]) => {
+            m.addCountry(key, value, material.sell_prices[key]);
+        });
+
+        return m;
+    }
 }
 
 export class BasicRawMaterial {
@@ -54,6 +64,16 @@ export class ProcessedMaterial {
         delete this.sell_prices[country_name];
 
         countries.find(c => c.name === country_name)?.removeProcessedMaterial(this.name);
+    }
+
+    static clone(material) {
+        let m = new ProcessedMaterial(material.name);
+        
+        Object.entries(material.sell_prices).map(([key, value]) => {
+            m.addCountry(key, value);
+        });
+
+        return m;
     }
 }
 
