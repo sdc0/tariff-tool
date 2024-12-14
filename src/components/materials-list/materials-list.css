@@ -1,0 +1,42 @@
+.d-flex {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.d-flex * {
+    margin: 0;
+    padding: 0;
+}
+
+.bottom-border {
+    border-bottom: 1px solid black;
+}
+
+.top-border {
+    border-top: 1px solid black;
+}
+
+.hidden {
+    display: none;
+}
+
+.material-list {
+    display: flex;
+    flex-wrap: wrap;
+    border-radius: 10px;
+    width: calc(50vw - 2vw - 2px);
+    margin: 1vh 1vw;
+}
+
+.material {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    width: 100%;
+}
+
+.country-material {
+    display: inline-flex;
+    width: 100%;
+    margin-left: 10%;
+}

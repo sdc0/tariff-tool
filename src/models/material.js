@@ -1,3 +1,5 @@
+import { createContext, useState } from "react";
+
 import { countries } from "./country.js";
 
 export class RawMaterial {
@@ -22,6 +24,19 @@ export class RawMaterial {
     }
 }
 
+export class BasicRawMaterial {
+    constructor(name, country, harvest_price, sell_prices) {
+        this.name = name;
+        this.country = country;
+        this.harvest_price = harvest_price;
+        this.sell_prices = sell_prices;
+    }
+
+    static fromRawMaterial(material) {
+        return Object.entries(material.harvest_prices).map(([key, value]) => new BasicRawMaterial(material.name, key, value, material.sell_prices[key]));
+    }
+}
+
 export class ProcessedMaterial {
     constructor(name, materials) {
         this.name = name;
@@ -42,5 +57,39 @@ export class ProcessedMaterial {
     }
 }
 
-export const raw_materials = [];
-export const processed_materials = [];
+export class BasicProcessedMaterial {
+    constructor(name, country, materials, sell_prices) {
+        this.name = name;
+        this.country = country;
+        this.materials = materials;
+        this.sell_prices = sell_prices;
+    }
+
+    static fromProcessedMaterial(material) {
+        return Object.entries(material.sell_prices).map(([key, value]) => new BasicProcessedMaterial(material.name, key, material.materials, value))
+    }
+}
+
+export const RawMaterialsContext = createContext([]);
+
+export const RawMaterialsProvider = ({ children }) => {
+    const [rawMaterials, setRawMaterials] = useState([]);
+  
+    return (
+        <RawMaterialsContext.Provider value={{ rawMaterials, setRawMaterials }}>
+            {children}
+        </RawMaterialsContext.Provider>
+    );
+};
+
+export const ProcessedMaterialsContext = createContext([]);
+
+export const ProcessedMaterialsProvider = ({ children }) => {
+    const [processedMaterials, setProcessedMaterials] = useState([]);
+  
+    return (
+        <ProcessedMaterialsContext.Provider value={{ processedMaterials, setProcessedMaterials }}>
+            {children}
+        </ProcessedMaterialsContext.Provider>
+    );
+};

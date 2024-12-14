@@ -1,12 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import { countries } from "../../models/country.js";
-import { RawMaterial, ProcessedMaterial, raw_materials, processed_materials } from "../../models/material.js";
+import { RawMaterialsContext, ProcessedMaterialsContext } from "../../models/material.js";
 import { Tariff, tariffs } from "../../models/tariff.js";
 
 import './tariff-form.css';
 
 function TariffForm() {
+    // eslint-disable-next-line
+    const {rawMaterials, setRawMaterials} = useContext(RawMaterialsContext);
+    // eslint-disable-next-line
+    const {processedMaterials, setProcessedMaterials} = useContext(ProcessedMaterialsContext);
     const [targetCountry, setTargetCountry] = useState("");
     const [sourceCountry, setSourceCountry] = useState("");
     const [selectedMaterial, setSelectedMaterial] = useState("");
@@ -130,9 +134,9 @@ function TariffForm() {
     useEffect(() => {
         if (targetCountry !== "") {
             let country = countries.find(c => c.name === targetCountry);
-            setMaterialsList([...country?.raw_materials.map(m => raw_materials.find(i => i.name === m)), ...country?.processed_materials.map(m => processed_materials.find(i => i.name === m))]);
+            setMaterialsList([...country?.raw_materials.map(m => rawMaterials.find(i => i.name === m)), ...country?.processed_materials.map(m => processedMaterials.find(i => i.name === m))]);
         }
-    }, [targetCountry])
+    }, [targetCountry, rawMaterials, processedMaterials])
 
     return (
         <form id="tariff" className="tariff-form">

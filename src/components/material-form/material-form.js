@@ -1,11 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import { countries } from "../../models/country.js";
-import { RawMaterial, ProcessedMaterial, raw_materials, processed_materials } from "../../models/material.js";
+import { RawMaterial, ProcessedMaterial, RawMaterialsContext, ProcessedMaterialsContext } from "../../models/material.js";
 
 import './material-form.css';
 
 function MaterialForm() {
+    const {rawMaterials, setRawMaterials} = useContext(RawMaterialsContext);
+    const {processedMaterials, setProcessedMaterials} = useContext(ProcessedMaterialsContext);
     const [countriesList, setCountriesList] = useState([...countries]);
     const [materialsList, setMaterialsList] = useState({});
     const [selectedCountry, setSelectedCountry] = useState("");
@@ -41,7 +43,7 @@ function MaterialForm() {
             return;
         }
     
-        let material_elem = (processed ? processed_materials : raw_materials).find(m => m.name === material);
+        let material_elem = (processed ? processedMaterials : rawMaterials).find(m => m.name === material);
         if (selectedCountry in (material_elem === undefined ? {} : material_elem.sell_prices) || material === "") {
             (material === "") ? alert("Enter a material name") : alert(`Material ${material} was already found in country ${selectedCountry}`);
             form.reset();
@@ -50,6 +52,7 @@ function MaterialForm() {
     
         let m;
         let used_materials = [];
+        let list = [];
         if (processed) {
             for (const [key, value] of Object.entries(materialsList)) {
                 if (value) used_materials.push(key);
@@ -58,19 +61,23 @@ function MaterialForm() {
             if (material_elem === undefined) {
                 m = new ProcessedMaterial(material, used_materials);
                 m.addCountry(country_elem.name, sell_prices);
-                processed_materials.push(m);
+
+                list = [...processedMaterials];
+                list.push(m);
+                setProcessedMaterials(list);
             }else material_elem.addCountry(country_elem.name, sell_prices);
         }else {
             if (material_elem === undefined) {
                 m = new RawMaterial(material);
                 m.addCountry(country_elem.name, harvest_price, sell_prices);
-                raw_materials.push(m);
+
+                list = [...rawMaterials];
+                list.push(m);
+                setRawMaterials(list);
             }else material_elem.addCountry(country_elem.name, harvest_price, sell_prices);
         }
     
         console.log(`Successfully added material ${material} to country ${selectedCountry}`);
-        console.log(raw_materials);
-        console.log(countries);
         form.reset();
         setSelectedCountry("");
     }
@@ -88,7 +95,7 @@ function MaterialForm() {
             return;
         }
     
-        let material_elem = (processed ? processed_materials : raw_materials).find(m => m.name === material);
+        let material_elem = (processed ? processedMaterials : rawMaterials).find(m => m.name === material);
         if (!(selectedCountry in material_elem.sell_prices) || material === "") {
             (material === "") ? alert("Enter a material name") : alert(`Material ${material} was not found in country ${selectedCountry}`);
             form.reset();
@@ -97,8 +104,6 @@ function MaterialForm() {
     
         processed ? material_elem.removeCountry(selectedCountry) : material_elem.removeCountry(selectedCountry);
         console.log(`Successfully removed material ${material} from country ${selectedCountry}`);
-        console.log(raw_materials);
-        console.log(countries);
         form.reset();
         setSelectedCountry("");
     }
