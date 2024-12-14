@@ -15,9 +15,6 @@ export class RawMaterial {
 
         let country = countries.find(c => c.name === country_name);
         if (!country?.raw_materials.includes(this.name)) country.addRawMaterial(this.name);
-
-        console.log(country);
-        console.log(this);
     }
 
     removeCountry(country_name) {
