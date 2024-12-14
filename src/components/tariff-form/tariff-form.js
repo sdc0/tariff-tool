@@ -157,7 +157,14 @@ function TariffForm() {
     useEffect(() => {
         if (targetCountry !== "") {
             let country = countries.find(c => c.name === targetCountry);
-            setMaterialsList([...country?.raw_materials.map(m => rawMaterials.find(i => i.name === m)), ...country?.processed_materials.map(m => processedMaterials.find(i => i.name === m))]);
+            console.log(country);
+
+            let list = [...country?.raw_materials.map(m => rawMaterials.find(i => i.name === m))];
+            console.log(list);
+            if (country?.processed_materials.length > 0) list.push([...country?.processed_materials.map(m => processedMaterials.find(i => i.name === m))]);
+            console.log(list);
+
+            setMaterialsList(list);
         }
     }, [targetCountry, rawMaterials, processedMaterials])
 

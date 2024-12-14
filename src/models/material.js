@@ -13,7 +13,11 @@ export class RawMaterial {
         this.harvest_prices[country_name] = harvest_price;
         this.sell_prices[country_name] = sell_prices;
 
-        countries.find(c => c.name === country_name)?.addRawMaterial(this.name);
+        let country = countries.find(c => c.name === country_name);
+        if (!country?.raw_materials.includes(this.name)) country.addRawMaterial(this.name);
+
+        console.log(country);
+        console.log(this);
     }
 
     removeCountry(country_name) {
