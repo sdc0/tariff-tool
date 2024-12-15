@@ -38,7 +38,7 @@ function MaterialsList() {
                 Object.entries(rawList).map(([key, value], index) => {
                     return (
                         <div className="material">
-                            <span id={`${key}-label`} onClick={(e) => {e.preventDefault(); document.getElementById(`${key}-hidden`)?.classList.toggle("hidden"); document.getElementById(`${key}-label`)?.classList.toggle("bottom-border")}} className={index === 0 ? "" : "top-border"}>{key}</span>
+                            <span id={`${key}-label`} onClick={(e) => {e.preventDefault(); document.getElementById(`${key}-hidden`)?.classList.toggle("hidden"); document.getElementById(`${key}-label`)?.classList.toggle("bottom-border")}} className={index === 0 ? "center" : "top-border center"}>{key}</span>
                             <div id={`${key}-hidden`} className="hidden d-flex">
                                 {
                                     value.map((m) => {
