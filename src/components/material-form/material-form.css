@@ -60,14 +60,14 @@
 }
 
 .sell-price-country {
-    width: 20%;
+    width: fit-content;
     height: 20%;
-    padding: 10px 0% 10px 10%;
+    padding: 10px 5% 10px 2%;
     margin: 0;
 }
 
 .sell-price-input {
-    width: 60%;
+    width: 50%;
     height: 20%;
     padding: 0;
     margin: 0;

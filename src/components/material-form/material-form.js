@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 
-import { countries } from "../../models/country.js";
+import { CountriesContext } from "../../models/country.js";
 import { RawMaterial, ProcessedMaterial, RawMaterialsContext, ProcessedMaterialsContext } from "../../models/material.js";
 
 import './material-form.css';
@@ -8,6 +8,7 @@ import './material-form.css';
 function MaterialForm() {
     const {rawMaterials, setRawMaterials} = useContext(RawMaterialsContext);
     const {processedMaterials, setProcessedMaterials} = useContext(ProcessedMaterialsContext);
+    const {countries, setCountries} = useContext(CountriesContext);
     const [countriesList, setCountriesList] = useState([...countries]);
     const [materialsList, setMaterialsList] = useState({});
     const [selectedCountry, setSelectedCountry] = useState("");
@@ -65,6 +66,7 @@ function MaterialForm() {
                 list = [...processedMaterials];
                 list.push(m);
                 setProcessedMaterials(list);
+                setCountries(country_elem.addProcessedHelper(countries, material));
             }else {
                 let index = processedMaterials.findIndex(m => m.name === material);
 
@@ -75,6 +77,7 @@ function MaterialForm() {
                 list[index] = m;
                 
                 setProcessedMaterials(list);
+                setCountries(country_elem.addProcessedHelper(countries, material));
             }
         }else {
             if (material_elem === undefined) {
@@ -84,6 +87,7 @@ function MaterialForm() {
                 list = [...rawMaterials];
                 list.push(m);
                 setRawMaterials(list);
+                setCountries(country_elem.addRawHelper(countries, material));
             }else {
                 let index = rawMaterials.findIndex(m => m.name === material);
 
@@ -94,6 +98,7 @@ function MaterialForm() {
                 list[index] = m;
                 
                 setRawMaterials(list);
+                setCountries(country_elem.addRawHelper(countries, material));
             }
         }
     
@@ -122,7 +127,29 @@ function MaterialForm() {
             return;
         }
     
-        processed ? material_elem.removeCountry(selectedCountry) : material_elem.removeCountry(selectedCountry);
+        if (processed) {
+            let index = processedMaterials.findIndex(m => m.name === material);
+
+            let m = ProcessedMaterial.clone(material_elem);
+            m.removeCountry(selectedCountry);
+
+            let list = [...processedMaterials];
+            list[index] = m;
+            
+            setProcessedMaterials(list);
+            setCountries(country_elem.removeProcessedHelper(countries, material));
+        }else {
+            let index = rawMaterials.findIndex(m => m.name === material);
+
+            let m = RawMaterial.clone(material_elem);
+            m.removeCountry(selectedCountry);
+
+            let list = [...rawMaterials];
+            list[index] = m;
+            
+            setRawMaterials(list);
+            setCountries(country_elem.removeRawHelper(countries, material));
+        }
         console.log(`Successfully removed material ${material} from country ${selectedCountry}`);
         form.reset();
         setSelectedCountry("");
@@ -164,8 +191,9 @@ function MaterialForm() {
         if (selectedCountry !== "") {
             countries_list.splice(countries_list.findIndex(c => c.name === selectedCountry), (countries_list.findIndex(c => c.name === selectedCountry) === -1) ? 0 : 1);
         }
+        console.log(countries_list);
         setCountriesList(countries_list);
-    }, [selectedCountry]);
+    }, [selectedCountry, countries]);
 
     return (
         <form id="material" className="material-form">

@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 
-import { countries } from "../../models/country.js";
+import { CountriesContext } from "../../models/country.js";
 import { RawMaterialsContext, ProcessedMaterialsContext } from "../../models/material.js";
 import { Tariff, TariffsContext } from "../../models/tariff.js";
 
@@ -12,6 +12,8 @@ function TariffForm() {
     // eslint-disable-next-line
     const {processedMaterials, setProcessedMaterials} = useContext(ProcessedMaterialsContext);
     const {tariffs, setTariffs} = useContext(TariffsContext);
+    // eslint-disable-next-line
+    const {countries, setCountries} = useContext(CountriesContext);
 
     const [targetCountry, setTargetCountry] = useState("");
     const [sourceCountry, setSourceCountry] = useState("");
@@ -146,27 +148,22 @@ function TariffForm() {
         let countries_list = [...countries];
         if (targetCountry !== "") countries_list.splice(countries_list.findIndex(c => c.name === targetCountry), (countries_list.findIndex(c => c.name === targetCountry) === -1) ? 0 : 1);
         setSourceCountryList(countries_list);
-    }, [targetCountry]);
+    }, [targetCountry, countries]);
 
     useEffect(() => {
         let countries_list = [...countries];
         if (sourceCountry !== "") countries_list.splice(countries_list.findIndex(c => c.name === sourceCountry), (countries_list.findIndex(c => c.name === sourceCountry) === -1) ? 0 : 1);
         setTargetCountryList(countries_list);
-    }, [sourceCountry]);
+    }, [sourceCountry, countries]);
 
     useEffect(() => {
         if (targetCountry !== "") {
             let country = countries.find(c => c.name === targetCountry);
-            console.log(country);
-
             let list = [...country?.raw_materials.map(m => rawMaterials.find(i => i.name === m))];
-            console.log(list);
             if (country?.processed_materials.length > 0) list.push([...country?.processed_materials.map(m => processedMaterials.find(i => i.name === m))]);
-            console.log(list);
-
             setMaterialsList(list);
         }
-    }, [targetCountry, rawMaterials, processedMaterials])
+    }, [targetCountry, rawMaterials, processedMaterials, countries])
 
     return (
         <form id="tariff" className="tariff-form">
