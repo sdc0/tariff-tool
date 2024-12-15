@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/tariff-tool/static/css/main.8aad747b.css",
-    "main.js": "/tariff-tool/static/js/main.01c2a5fd.js",
+    "main.css": "/tariff-tool/static/css/main.37b18cf2.css",
+    "main.js": "/tariff-tool/static/js/main.f32ef716.js",
     "index.html": "/tariff-tool/index.html",
-    "main.8aad747b.css.map": "/tariff-tool/static/css/main.8aad747b.css.map",
-    "main.01c2a5fd.js.map": "/tariff-tool/static/js/main.01c2a5fd.js.map"
+    "main.37b18cf2.css.map": "/tariff-tool/static/css/main.37b18cf2.css.map",
+    "main.f32ef716.js.map": "/tariff-tool/static/js/main.f32ef716.js.map"
   },
   "entrypoints": [
-    "static/css/main.8aad747b.css",
-    "static/js/main.01c2a5fd.js"
+    "static/css/main.37b18cf2.css",
+    "static/js/main.f32ef716.js"
   ]
 }
