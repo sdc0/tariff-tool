@@ -59,7 +59,7 @@ function MaterialsList() {
                 Object.entries(procList).map(([key, value], index) => {
                     return (
                         <div className="material">
-                        <span id={`${key}-label`} onClick={(e) => {e.preventDefault(); document.getElementById(`${key}-hidden`)?.classList.toggle("hidden"); document.getElementById(`${key}-label`)?.classList.toggle("bottom-border")}} className="top-border">{key}</span>
+                        <span id={`${key}-label`} onClick={(e) => {e.preventDefault(); document.getElementById(`${key}-hidden`)?.classList.toggle("hidden"); document.getElementById(`${key}-label`)?.classList.toggle("bottom-border")}} className="center top-border">{key}</span>
                             <div id={`${key}-hidden`} className="hidden d-flex">
                                 {
                                     value.map((m) => {

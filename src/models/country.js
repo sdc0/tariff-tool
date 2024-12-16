@@ -3,6 +3,7 @@ import { createContext, useState } from "react";
 export class Country {
     constructor(name) {
         this.name = name;
+        this.currency = -1;
         this.raw_materials = [];
         this.processed_materials = [];
     }
@@ -35,6 +36,8 @@ export class Country {
         country.processed_materials.map((m) => {
             c.addProcessedMaterial(m);
         });
+
+        c.currency = this.currency;
 
         return c;
     }

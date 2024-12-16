@@ -191,7 +191,6 @@ function MaterialForm() {
         if (selectedCountry !== "") {
             countries_list.splice(countries_list.findIndex(c => c.name === selectedCountry), (countries_list.findIndex(c => c.name === selectedCountry) === -1) ? 0 : 1);
         }
-        console.log(countries_list);
         setCountriesList(countries_list);
     }, [selectedCountry, countries]);
 

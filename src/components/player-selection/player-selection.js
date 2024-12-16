@@ -6,7 +6,7 @@ import './player-selection.css';
 
 function PlayerSelection() {
     const {countries, setCountries} = useContext(CountriesContext);
-    const [count, setCount] = useState(0);
+    const [count, setCount] = useState(countries.length);
 
     return (
         <div className="player-select-form">
@@ -26,9 +26,6 @@ function PlayerSelection() {
                 <button onClick={(e) => {
                     e.preventDefault(); 
 
-                    console.log(count);
-                    console.log(countries);
-
                     if (count > 0 && countries[count - 1]?.name === "") {
                         alert("Enter a name before adding a new country");
                         return;
@@ -46,7 +43,7 @@ function PlayerSelection() {
                             <div key={`player-${i}`} className="player-name-input">
                                 <p>{`Player ${i + 1} (${i === 0 ? "You" : "CPU"})`}</p>
 
-                                <input id={`country-name-${i}`} type="text" placeholder="Enter a country name..." onInput={(e) => {
+                                <input id={`country-name-${i}`} type="text" placeholder="Enter a country name..." value={countries[i].name} onInput={(e) => {
                                     e.preventDefault(); 
 
                                     let list = [...countries];

@@ -1,5 +1,6 @@
 import Home from './pages/home';
 import Game from './pages/game';
+import Material from './pages/materials';
 
 import { RawMaterialsProvider, ProcessedMaterialsProvider } from './models/material';
 import { TariffsProvider } from './models/tariff';
@@ -20,6 +21,7 @@ export default function App() {
                         <HashRouter>
                             <Routes>
                                 <Route path='/' element={<Home />} />
+                                <Route path='/materials' element={<Material />} />
                                 <Route path="/game" element={<Game />} />
                             </Routes>
                         </HashRouter>
