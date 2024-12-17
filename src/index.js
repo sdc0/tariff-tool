@@ -5,6 +5,7 @@ import Material from './pages/materials';
 import { RawMaterialsProvider, ProcessedMaterialsProvider } from './models/material';
 import { TariffsProvider } from './models/tariff';
 import { CountriesProvider } from './models/country';
+import { GameStateProvider } from './models/game-state';
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -18,13 +19,15 @@ export default function App() {
             <RawMaterialsProvider>
                 <ProcessedMaterialsProvider>
                     <TariffsProvider>
-                        <HashRouter>
-                            <Routes>
-                                <Route path='/' element={<Home />} />
-                                <Route path='/materials' element={<Material />} />
-                                <Route path="/game" element={<Game />} />
-                            </Routes>
-                        </HashRouter>
+                        <GameStateProvider>
+                            <HashRouter>
+                                <Routes>
+                                    <Route path='/' element={<Home />} />
+                                    <Route path='materials' element={<Material />} />
+                                    <Route path="game/*" element={<Game />} />
+                                </Routes>
+                            </HashRouter>
+                        </GameStateProvider>
                     </TariffsProvider>
                 </ProcessedMaterialsProvider>
             </RawMaterialsProvider>

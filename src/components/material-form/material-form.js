@@ -14,6 +14,12 @@ function MaterialForm() {
     const [selectedCountry, setSelectedCountry] = useState("");
     const [processed, setProcessed] = useState(false);
 
+    function clear(form) {
+        form.reset();
+        setMaterialsList([]);
+        setSelectedCountry("");
+    }
+
     function parseMaterialFormAdd(e) {
         e.preventDefault();
     
@@ -27,36 +33,36 @@ function MaterialForm() {
     
         if (!processed && isNaN(harvest_price)) {
             alert("The harvest price was not recognized as a number");
-            form.reset();
+            clear(form);
             return;
         }
     
         if (Object.values(sell_prices).some(p => isNaN(p))) {
             alert("One or more sell prices were not recognized as a number");
-            form.reset();
+            clear(form);
             return;
         }
     
         let country_elem = countries.find(c => c.name === selectedCountry);
         if (country_elem === undefined || selectedCountry === "") {
             (selectedCountry === "") ? alert("Enter a country name") : alert(`Country ${selectedCountry} was not found`);
-            form.reset();
+            clear(form);
             return;
         }
     
         let material_elem = (processed ? processedMaterials : rawMaterials).find(m => m.name === material);
         if (selectedCountry in (material_elem === undefined ? {} : material_elem.sell_prices) || material === "") {
             (material === "") ? alert("Enter a material name") : alert(`Material ${material} was already found in country ${selectedCountry}`);
-            form.reset();
+            clear(form);
             return;
         }
     
         let m;
-        let used_materials = [];
+        let used_materials = {};
         let list = [];
         if (processed) {
             for (const [key, value] of Object.entries(materialsList)) {
-                if (value) used_materials.push(key);
+                if (value) used_materials[key] = value;
             }
             
             if (material_elem === undefined) {
@@ -103,8 +109,7 @@ function MaterialForm() {
         }
     
         console.log(`Successfully added material ${material} to country ${selectedCountry}`);
-        form.reset();
-        setSelectedCountry("");
+        clear(form);
     }
     
     function parseMaterialFormRemove(e) {
@@ -116,14 +121,14 @@ function MaterialForm() {
         let country_elem = countries.find(c => c.name === selectedCountry);
         if (country_elem === undefined || selectedCountry === "") {
             (selectedCountry === "") ? alert("Enter a country name") : alert(`Country ${selectedCountry} was not found`);
-            form.reset();
+            clear(form);
             return;
         }
     
         let material_elem = (processed ? processedMaterials : rawMaterials).find(m => m.name === material);
         if (!(selectedCountry in material_elem.sell_prices) || material === "") {
             (material === "") ? alert("Enter a material name") : alert(`Material ${material} was not found in country ${selectedCountry}`);
-            form.reset();
+            clear(form);
             return;
         }
     
@@ -151,8 +156,7 @@ function MaterialForm() {
             setCountries(country_elem.removeRawHelper(countries, material));
         }
         console.log(`Successfully removed material ${material} from country ${selectedCountry}`);
-        form.reset();
-        setSelectedCountry("");
+        clear(form);
     }
 
     const Dropdown = (props) => {
@@ -169,20 +173,11 @@ function MaterialForm() {
             </div>
         );
     }
-
-    const RawMaterialCheckbox = ({ material }) => {
-        return (
-            <div className="raw-materials-checklist-item">
-                <p>{material}</p>
-                <input type="checkbox" onChange={() => handleMaterialCheck(material)} checked={materialsList[material]}/>
-            </div>
-        );
-    }
     
     const handleCheck = () => setProcessed(!processed);
-    const handleMaterialCheck = (material) => {
+    const handleMaterialCheck = (material, amount) => {
         let materials = structuredClone(materialsList);
-        materials[material] = (material in materials) ? !materials[material] : true;
+        materials[material] = amount;
         setMaterialsList(materials);
     }
 
@@ -232,7 +227,12 @@ function MaterialForm() {
                 processed ? <div className="raw-materials-checklist">
                     {
                         countries.find(c => c.name === selectedCountry)?.raw_materials?.map((m) => {
-                            return <RawMaterialCheckbox material={m} />
+                            return (
+                                <div className="raw-materials-checklist-item">
+                                    <p>{m}</p>
+                                    <input type="text" value={materialsList[m]} onInput={(e) => {e.preventDefault(); if (!isNaN(Number(e.target.value))) handleMaterialCheck(m, Number(e.target.value))}}/>
+                                </div>
+                            );
                         })
                     }
                 </div> : <></>

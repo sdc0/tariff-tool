@@ -65,7 +65,7 @@ function MaterialsList() {
                                     value.map((m) => {
                                         return (
                                             <div className="country-material">
-                                                <p>{m.country + ", [" + m.materials.map((mat_name, i) => ((i === 0 ? "" : " ") + mat_name)) + "], {" + Object.entries(m.sell_prices).map(([key, value], i) => ((i === 0 ? "" : " ") + key + ": " + value)) + "}"}</p>
+                                                <p>{m.country + ", [" + Object.entries(m.materials).map(([mat_name, amount], i) => ((i === 0 ? "" : " ") + mat_name + ': ' + amount)) + "], {" + Object.entries(m.sell_prices).map(([key, value], i) => ((i === 0 ? "" : " ") + key + ": " + value)) + "}"}</p>
                                             </div>
                                         );
                                     })

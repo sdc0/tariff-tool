@@ -1,9 +1,16 @@
 import { createContext, useState } from "react";
 
 export class Country {
-    constructor(name) {
+    constructor(name, player = false) {
         this.name = name;
         this.currency = -1;
+
+        this.held_raw_materials = {};
+        this.held_foreign_processed = {};
+        this.held_domestic_processed = {};
+
+        this.player = player;
+
         this.raw_materials = [];
         this.processed_materials = [];
     }
@@ -25,7 +32,7 @@ export class Country {
     }
 
     static clone(country) {
-        let c = new Country(country.name);
+        let c = new Country(country.name, country.player);
 
         // eslint-disable-next-line
         country.raw_materials.map((m) => {
@@ -37,7 +44,13 @@ export class Country {
             c.addProcessedMaterial(m);
         });
 
-        c.currency = this.currency;
+        c.currency = country.currency;
+
+        c.held_raw_materials = country.held_raw_materials;
+        c.held_domestic_processed = country.held_domestic_processed;
+        c.held_foreign_processed = country.held_foreign_processed;
+
+        c.player = country.player;
 
         return c;
     }

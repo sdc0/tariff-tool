@@ -160,7 +160,7 @@ function TariffForm() {
         if (targetCountry !== "") {
             let country = countries.find(c => c.name === targetCountry);
             let list = [...country?.raw_materials.map(m => rawMaterials.find(i => i.name === m))];
-            if (country?.processed_materials.length > 0) list.push([...country?.processed_materials.map(m => processedMaterials.find(i => i.name === m))]);
+            if (country?.processed_materials.length > 0) list = [...country?.raw_materials.map(m => rawMaterials.find(i => i.name === m)), ...country?.processed_materials.map(m => processedMaterials.find(i => i.name === m))];
             setMaterialsList(list);
         }
     }, [targetCountry, rawMaterials, processedMaterials, countries])

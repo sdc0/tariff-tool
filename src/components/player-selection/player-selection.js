@@ -30,10 +30,11 @@ function PlayerSelection() {
                         alert("Enter a name before adding a new country");
                         return;
                     }
-                    
-                    setCount((count + 1) > 5 ? 5 : count + 1); 
 
-                    if (count + 1 <= 5) setCountries([...countries, new Country("")]);
+                    if (count === 0) setCountries([...countries, new Country("", true)]);
+                    else if (count + 1 <= 5) setCountries([...countries, new Country("", false)]);
+                    
+                    setCount((count + 1) > 5 ? 5 : count + 1);
                 }}>+</button>
             </div>
             <div className="country-name-select">
