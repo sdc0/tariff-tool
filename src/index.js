@@ -12,6 +12,7 @@ import ReactDOM from 'react-dom/client';
 import { HashRouter, Routes, Route } from "react-router-dom";
 
 import './index.css';
+import { TradesProvider } from './models/trade';
 
 export default function App() {
     return (
@@ -20,13 +21,15 @@ export default function App() {
                 <ProcessedMaterialsProvider>
                     <TariffsProvider>
                         <GameStateProvider>
-                            <HashRouter>
-                                <Routes>
-                                    <Route path='/' element={<Home />} />
-                                    <Route path='materials' element={<Material />} />
-                                    <Route path="game/*" element={<Game />} />
-                                </Routes>
-                            </HashRouter>
+                            <TradesProvider>
+                                <HashRouter>
+                                    <Routes>
+                                        <Route path='/' element={<Home />} />
+                                        <Route path='materials' element={<Material />} />
+                                        <Route path="game/*" element={<Game />} />
+                                    </Routes>
+                                </HashRouter>
+                            </TradesProvider>
                         </GameStateProvider>
                     </TariffsProvider>
                 </ProcessedMaterialsProvider>

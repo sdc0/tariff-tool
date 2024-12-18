@@ -5,7 +5,8 @@ export class Country {
         this.name = name;
         this.currency = -1;
 
-        this.held_raw_materials = {};
+        this.held_foreign_raw = {};
+        this.held_domestic_raw = {};
         this.held_foreign_processed = {};
         this.held_domestic_processed = {};
 
@@ -46,7 +47,8 @@ export class Country {
 
         c.currency = country.currency;
 
-        c.held_raw_materials = country.held_raw_materials;
+        c.held_domestic_raw = country.held_domestic_raw;
+        c.held_foreign_raw = country.held_foreign_raw;
         c.held_domestic_processed = country.held_domestic_processed;
         c.held_foreign_processed = country.held_foreign_processed;
 

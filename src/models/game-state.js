@@ -1,10 +1,11 @@
 import { createContext, useState } from "react";
 
 export class GameState {
-    constructor(turn, max_turns, phase) {
+    constructor(turn, max_turns, phase, income) {
         this.turn = turn;
         this.max_turns = max_turns;
         this.phase = phase;
+        this.income = income;
     }
 
     nextPhase() {
@@ -21,14 +22,14 @@ export class GameState {
     }
 
     static clone(state) {
-        return new GameState(state.turn, state.max_turns, state.phase);
+        return new GameState(state.turn, state.max_turns, state.phase, state.income);
     }
 }
 
 export const GameStateContext = createContext();
 
 export const GameStateProvider = ({ children }) => {
-    const [state, setState] = useState(new GameState(1, 10, "production"));
+    const [state, setState] = useState(new GameState(1, 10, "production", 10));
 
     return (
         <GameStateContext.Provider value={{ state, setState }}>

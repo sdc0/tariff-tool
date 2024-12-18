@@ -38,7 +38,7 @@ function RawMaterialHarvestForm() {
         c.currency -= cost;
         // eslint-disable-next-line
         Object.entries(produced).map(([key, value]) => {
-            c.held_raw_materials[key] = (key in c.held_raw_materials) ? c.held_raw_materials[key] + value : value;
+            c.held_domestic_raw[key] = (key in c.held_domestic_raw) ? c.held_domestic_raw[key] + value : value;
         });
 
         let list = [...countries];

@@ -1,0 +1,62 @@
+.trade-offer-form {
+    display: flex;
+    flex-wrap: wrap;
+    width: calc(100vw - 2vw - 2px);
+    border: 1px solid black;
+    border-radius: 10px;
+    margin: 1vh 1vw;
+}
+
+.form-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+}
+
+.form-header h2 {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.form-body {
+    display: inline-flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.form-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.form-footer button {
+    margin: 5px 0;
+}
+
+.country-select {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.material-select {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.amount-select {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
