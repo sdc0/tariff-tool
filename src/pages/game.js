@@ -191,11 +191,12 @@ const Game = () => {
 
                                             // eslint-disable-next-line
                                             Object.entries(country.held_domestic_processed).map(([mat, amount]) => {
-                                                let amount_per_country = Math.floor(amount / list.length);
+                                                let max_amount_per_country = Math.floor(amount / list.length);
 
                                                 // eslint-disable-next-line
                                                 list.map((c) => {
-                                                    trading[c.name][mat] = amount_per_country;
+                                                    let sell_price = processedMaterials.find((m) => m.name === mat).sell_prices[country.name][c.name];
+                                                    if (c.currency >= sell_price) trading[c.name][mat] = (sell_price * max_amount_per_country <= c.currency) ? max_amount_per_country : Math.floor(c.currency / sell_price);
                                                 });
                                             });
 
@@ -218,19 +219,22 @@ const Game = () => {
 
                                         // go to next page
                                         nav("/game/trade/view");
-                                    }}>Click to Start Game</button>
+                                    }}>Click to Continue to Trade Accepting</button>
                                 </div>
                             </>
                         } />
                         <Route path="view" element={
                             <>
-                                <div style={{display: "flex", flexWrap: "wrap", width: "100%", justifyContent: "center", alignItems: "center"}}>
+                                <div style={{display: "flex", flexWrap: "wrap", width: "calc(100vw - 2vw - 2px)", justifyContent: "center", alignItems: "center", border: "1px solid black", borderRadius: "10px", margin: "1vh 1vw"}}>
+                                    <div style={{display: "flex", width: "100%", justifyContent: "center", alignItems: "center", borderBottom: "1px solid black"}}>
+                                        <h2 style={{margin: "0"}}>Trade Offers List</h2>
+                                    </div>
                                     {
                                         Object.entries(trades).map(([initiator, tradeList], i) => {
                                             return tradeList.map((trade, j) => {
                                                 return (trade.target === playerCountry.name) ? (
-                                                    <div style={{width: "100%"}}>
-                                                        <p>{`${trade.paying_country} ($${trade.value}) -> ${trade.material_giving_country} (${Object.entries(trade.materials).map(([m, amount]) => m + ': ' + amount)})`}</p>
+                                                    <div style={{width: "100%", display: "inline-flex", justifyContent: "center", alignItems: "center"}}>
+                                                        <p style={{margin: "0"}}>{`${trade.paying_country} ($${trade.value}) -> ${trade.material_giving_country} (${Object.entries(trade.materials).map(([m, amount]) => m + ': ' + amount)})`}</p>
                                                         <input type="checkbox" onChange={(e) => {
                                                             e.preventDefault();
 
@@ -247,57 +251,228 @@ const Game = () => {
                                     <button id="start-button" style={{marginLeft: "1%"}} onClick={(e) => {
                                         e.preventDefault();
 
+                                        // do CPU shit
                                         for (let country of cpuCountries) {
                                             let applicableTrades = [];
+                                            
+                                            console.log(trades);
 
+                                            // eslint-disable-next-line
                                             Object.entries(trades).map(([initiator, tradeList]) => {
+                                                // eslint-disable-next-line
                                                 tradeList.map((trade) => {
-                                                    if (true) {
+                                                    if (trade.target === country.name) applicableTrades.push(trade);
+                                                });
+                                            });
 
+                                            console.log(country);
+                                            console.log(applicableTrades);
+
+                                            applicableTrades.sort(() => Math.random() - 0.5);
+
+                                            for (let trade of applicableTrades) {
+                                                let mc = Country.clone(countries.find((c) => c.name === trade.material_giving_country));
+                                                let materials = {};
+                                                // eslint-disable-next-line
+                                                Object.entries(mc.held_domestic_raw).map(([material, amount]) => {
+                                                    materials[material] = (material in materials) ? materials[material] + amount : amount;
+                                                });
+                                                // eslint-disable-next-line
+                                                Object.entries(mc.held_foreign_raw).map(([material, amount]) => {
+                                                    materials[material] = (material in materials) ? materials[material] + amount : amount;
+                                                });
+                                                // eslint-disable-next-line
+                                                Object.entries(mc.held_domestic_processed).map(([material, amount]) => {
+                                                    materials[material] = (material in materials) ? materials[material] + amount : amount;
+                                                });
+
+                                                let cc = Country.clone(countries.find((c) => c.name === trade.paying_country));
+                                                console.log(cc);
+                                                console.log(mc);
+                                                console.log(materials);
+                                                console.log(cc.currency >= trade.value);
+                                                console.log(trade);
+                                                console.log(Object.entries(trade.materials).map(([material, amount]) => materials[material] >= amount))
+
+                                                if (cc.currency >= trade.value && Object.entries(trade.materials).map(([material, amount]) => materials[material] >= amount).every(Boolean)) {
+                                                    trade.accepted = true;
+                                                    console.log(trade);
+
+                                                    cc.currency -= trade.value;
+                                                    
+                                                    // eslint-disable-next-line
+                                                    Object.entries(trade.materials).map(([mat, amount]) => {
+                                                        let leftover = amount;
+                                                        if (mat in mc.held_foreign_raw && leftover > 0) {
+                                                            if (leftover > mc.held_foreign_raw[mat]) {
+                                                                leftover = leftover - mc.held_foreign_raw[mat];
+                                                                mc.held_foreign_raw[mat] = 0;
+                                                            }else {
+                                                                mc.held_foreign_raw[mat] = mc.held_foreign_raw[mat] - leftover;
+                                                                leftover = 0;
+                                                            }
+                                                        }
+
+                                                        if (mat in mc.held_domestic_raw && leftover > 0) {
+                                                            if (leftover > mc.held_foreign_raw[mat]) {
+                                                                leftover = leftover - mc.held_domestic_raw[mat];
+                                                                mc.held_domestic_raw[mat] = 0;
+                                                            }else {
+                                                                mc.held_domestic_raw[mat] = mc.held_domestic_raw[mat] - leftover;
+                                                                leftover = 0;
+                                                            }
+                                                        }
+
+                                                        if (mat in mc.held_domestic_processed && leftover > 0) {
+                                                            if (leftover > mc.held_foreign_raw[mat]) {
+                                                                leftover = leftover - mc.held_domestic_processed[mat];
+                                                                mc.held_domestic_processed[mat] = 0;
+                                                            }else {
+                                                                mc.held_domestic_processed[mat] = mc.held_domestic_processed[mat] - leftover;
+                                                                leftover = 0;
+                                                            }
+                                                        }
+                                                    });
+                                                    
+                                                    materials = {}
+                                                    // eslint-disable-next-line
+                                                    Object.entries(mc.held_domestic_raw).map(([material, amount]) => {
+                                                        materials[material] = (material in materials) ? materials[material] + amount : amount;
+                                                    });
+                                                    // eslint-disable-next-line
+                                                    Object.entries(mc.held_foreign_raw).map(([material, amount]) => {
+                                                        materials[material] = (material in materials) ? materials[material] + amount : amount;
+                                                    });
+                                                    // eslint-disable-next-line
+                                                    Object.entries(mc.held_domestic_processed).map(([material, amount]) => {
+                                                        materials[material] = (material in materials) ? materials[material] + amount : amount;
+                                                    });
+                                                }
+                                            }
+                                        }
+
+                                        // filter out rejected trades
+                                        let accepted = Object.fromEntries(Object.entries(trades).map(([initiator, tradesList]) => {
+                                            let subList = [];
+                                            // eslint-disable-next-line
+                                            tradesList.map((trade) => {
+                                                if (trade.accepted) subList.push(trade);
+                                            });
+                                            return [initiator, subList];
+                                        }));
+
+                                        let countriesList = [...countries];
+                                        // eslint-disable-next-line
+                                        Object.entries(accepted).map(([initiator, tradeList]) => {
+                                            // eslint-disable-next-line
+                                            tradeList.map((trade) => {
+                                                let cc = countriesList.find((c) => c.name === trade.paying_country);
+                                                let mc = countriesList.find((c) => c.name === trade.material_giving_country);
+                                                
+                                                cc.currency -= trade.value;
+                                                mc.currency += trade.value;
+
+                                                // eslint-disable-next-line
+                                                Object.entries(trade.materials).map(([mat, amount]) => {
+                                                    if (mat in mc.held_domestic_processed) {
+                                                        cc.held_foreign_processed[mat] = (mat in cc.held_foreign_processed) ? cc.held_foreign_processed[mat] + amount : amount;
+                                                    }else {
+                                                        cc.held_foreign_raw[mat] = (mat in cc.held_foreign_raw) ? cc.held_foreign_raw[mat] + amount : amount;
+                                                    }
+
+                                                    let leftover = amount;
+                                                    if (mat in mc.held_foreign_raw && leftover > 0) {
+                                                        if (leftover > mc.held_foreign_raw[mat]) {
+                                                            leftover = leftover - mc.held_foreign_raw[mat];
+                                                            mc.held_foreign_raw[mat] = 0;
+                                                        }else {
+                                                            mc.held_foreign_raw[mat] = mc.held_foreign_raw[mat] - leftover;
+                                                            leftover = 0;
+                                                        }
+                                                    }
+
+                                                    if (mat in mc.held_domestic_raw && leftover > 0) {
+                                                        if (leftover > mc.held_foreign_raw[mat]) {
+                                                            leftover = leftover - mc.held_domestic_raw[mat];
+                                                            mc.held_domestic_raw[mat] = 0;
+                                                        }else {
+                                                            mc.held_domestic_raw[mat] = mc.held_domestic_raw[mat] - leftover;
+                                                            leftover = 0;
+                                                        }
+                                                    }
+
+                                                    if (mat in mc.held_domestic_processed && leftover > 0) {
+                                                        if (leftover > mc.held_foreign_raw[mat]) {
+                                                            leftover = leftover - mc.held_domestic_processed[mat];
+                                                            mc.held_domestic_processed[mat] = 0;
+                                                        }else {
+                                                            mc.held_domestic_processed[mat] = mc.held_domestic_processed[mat] - leftover;
+                                                            leftover = 0;
+                                                        }
                                                     }
                                                 });
                                             });
-                                        }
-
-                                        nav("/game/trade/accept");
-                                    }}>Click to Start Game</button>
-                                </div>
-                            </>
-                        } />
-                        <Route path="accept" element={
-                            <>
-                                <div style={{display: "flex", width: "100%", justifyContent: "center", alignItems: "center"}}>
-                                    {
-                                        Object.entries(trades).map(([initiator, tradeList]) => {
-                                            return (initiator === playerCountry.name) ? (
-                                                <>
-                                                    {
-                                                        tradeList.map((t) => {
-                                                            return <p>{`${t.paying_country} ($${t.value}) -> ${t.material_giving_country} (${t.materials})`}</p>
-                                                        })
-                                                    }
-                                                </>
-                                            ) : <></>
-                                        })
-                                    }
-                                </div>
-                                <div style={{width: '100%', display: 'flex', alignItems: 'center', justifyContent: "center"}}>
-                                    <button id="start-button" style={{marginLeft: "1%"}} onClick={(e) => {
-                                        e.preventDefault(); 
+                                        });
 
                                         let g = GameState.clone(state);
                                         g.nextPhase();
                                         setState(g);
-                                        
-                                        let list = [...countries].map((c) => {c.currency += Number(g.income); return c});
-                                        setCountries(list);
 
+                                        let c = [...countriesList];
+                                        c = c.map((country) => {
+                                            let x = Country.clone(country);
+                                            x.currency += g.income;
+                                            return x;
+                                        });
+                                        setCountries(c);
+
+                                        setTrades({});
+
+                                        console.log(g);
+                                        if (g.phase === "end") nav("/game/end");
                                         nav("/game");
-                                    }}>Click to Start Game</button>
+                                    }}>Click to Continue to Next Turn</button>
                                 </div>
                             </>
                         } />
                     </Route>
+                    <Route path="end" element={
+                        <div>
+                            {
+                                countries.map((c) => {
+                                    let points = 0;
+
+                                    // eslint-disable-next-line
+                                    Object.entries(c.held_domestic_processed).map(([mat, amount]) => {
+                                        let num_materials = 0;
+
+                                        // eslint-disable-next-line
+                                        Object.entries(processedMaterials.find((m) => m.name === mat).materials).map(([m, a]) => {
+                                            num_materials += a;
+                                        });
+
+                                        points += num_materials;
+                                    });
+
+                                    // eslint-disable-next-line
+                                    Object.entries(c.held_domestic_processed).map(([mat, amount]) => {
+                                        let num_materials = 0;
+
+                                        // eslint-disable-next-line
+                                        Object.entries(processedMaterials.find((m) => m.name === mat).materials).map(([m, a]) => {
+                                            num_materials += a;
+                                        });
+
+                                        points += Math.floor(num_materials * 1.5);
+                                    });
+
+                                    return (
+                                        <p>{c.name}: {points}</p>
+                                    );
+                                })
+                            }
+                        </div>
+                    } />
                 </Route>
             </Routes>
         </>

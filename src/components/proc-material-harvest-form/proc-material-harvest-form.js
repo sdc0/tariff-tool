@@ -33,20 +33,52 @@ function ProcMaterialHarvestForm() {
     function parseForm() {
         let req = sumProduced();
 
+        let mats = {};
+
+        // eslint-disable-next-line
+        Object.entries(playerCountry.held_domestic_raw).map(([mat, amount]) => {
+            mats[mat] = (mat in mats) ? mats[mat] + amount : amount;
+        });
+        
+        // eslint-disable-next-line
+        Object.entries(playerCountry.held_foreign_raw).map(([mat, amount]) => {
+            mats[mat] = (mat in mats) ? mats[mat] + amount : amount;
+        });
+
         // test requirements to ensure required materials are owned
         for (const [key, value] of Object.entries(req)) {
-            if (!(key in playerCountry.held_raw_materials) || playerCountry.held_raw_materials[key] < value) {
+            if (!(key in mats) || mats[key] < value) {
                 alert(`Not enough ${key}`);
                 return;
             }
         }
 
         let c = Country.clone(playerCountry);
-
         
-        for (const [key, value] of Object.entries(req)) {
-            c.held_raw_materials[key] -= value;
-        }
+        // eslint-disable-next-line
+        Object.entries(req).map(([m, amount]) => {
+            let leftover = amount;
+
+            if (m in playerCountry.held_foreign_raw && leftover > 0) {
+                if (playerCountry.held_foreign_raw[m] > leftover) {
+                    playerCountry.held_foreign_raw[m] -= leftover;
+                    leftover = 0;
+                }else {
+                    leftover -= playerCountry.held_foreign_raw[m];
+                    playerCountry.held_foreign_raw[m] = 0;
+                }
+            }
+
+            if (m in playerCountry.held_domestic_raw && leftover > 0) {
+                if (playerCountry.held_domestic_raw[m] > leftover) {
+                    playerCountry.held_domestic_raw[m] -= leftover;
+                    leftover = 0;
+                }else {
+                    leftover -= playerCountry.held_domestic_raw[m];
+                    playerCountry.held_domestic_raw[m] = 0;
+                }
+            }
+        });
 
         // eslint-disable-next-line
         Object.entries(produced).map(([key, value]) => {

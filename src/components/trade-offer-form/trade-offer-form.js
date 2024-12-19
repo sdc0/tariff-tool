@@ -51,8 +51,8 @@ function TradeOfferForm() {
     }
 
     function calculatePrice() {
-        let price = rawMaterials.find((m) => m.name === selectedMaterial).sell_prices[targetCountry.name][playerCountry.name];
-        let tariff = tariffs.find((t) => t.target === playerCountry.name && t.source === targetCountry).tariffs[selectedMaterial];
+        let price = rawMaterials.find((m) => m.name === selectedMaterial).sell_prices[targetCountry][playerCountry.name];
+        let tariff = tariffs.find((t) => t.target === targetCountry && t.source === playerCountry.name)?.tariffs[selectedMaterial];
 
         if (tariff !== undefined) {
             price *= (1 + (tariff / 100));
@@ -81,12 +81,12 @@ function TradeOfferForm() {
             return;
         }
 
-        if (tradeAmount > targetCountry.held_domestic_raw[selectedMaterial]) {
+        if (tradeAmount > countries.find((c) => c.name === targetCountry).held_domestic_raw[selectedMaterial]) {
             alert(`${targetCountry} doesn't have enough ${selectedMaterial}`);
             return;
         }
 
-        let price = calculatePrice();
+        let price = calculatePrice() * tradeAmount;
 
         if (price > playerCountry.currency) {
             alert("Price is higher than you can afford");
@@ -94,8 +94,12 @@ function TradeOfferForm() {
         }
 
         let list = {...trades};
-        let t = new Trade(playerCountry.name, targetCountry, selectedMaterial, price, playerCountry.name, targetCountry);
+        let thing = {};
+        thing[selectedMaterial] = tradeAmount;
+        let t = new Trade(playerCountry.name, targetCountry, thing, price, playerCountry.name, targetCountry);
+        console.log(t);
 
+        if (list[t.initiator] === undefined) list[t.initiator] = [];
         list[t.initiator].push(t);
         setTrades(list);
 
@@ -115,13 +119,10 @@ function TradeOfferForm() {
 
     useEffect(() => {
         if (targetCountry !== "") {
-            console.log(targetCountry);
             let raw = Object.fromEntries(Object.entries(countries.find((c) => c.name === targetCountry).held_domestic_raw).map(([m, num]) => {
-                console.log([rawMaterials.find((mat) => mat.name === m), num]);
                 return [rawMaterials.find((mat) => mat.name === m).name, num];
             }));
             let proc = Object.fromEntries(Object.entries(countries.find((c) => c.name === targetCountry).held_domestic_processed).map(([m, num]) => {
-                console.log([processedMaterials.find((mat) => mat.name === m), num]);
                 return [processedMaterials.find((mat) => mat.name === m).name, num];
             }));
 
@@ -169,13 +170,14 @@ function TradeOfferForm() {
                     {
                         Object.entries(trades).map(([initiator, tradeList]) => {
                             return (initiator === playerCountry.name) ? (
-                                <>
+                                <div style={{width: "100%", display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center", textAlign: "center"}}>
                                     {
                                         tradeList.map((t) => {
-                                            return <p>{`${t.paying_country} ($${t.value}) -> ${t.material_giving_country} (${t.materials})`}</p>
+                                            console.log(t.materials);
+                                            return <p style={{width: "100%", margin: "0"}}>{`${t.paying_country} ($${t.value}) -> ${t.material_giving_country} (${Object.entries(t.materials).map(([m, a]) => m + ": " + a)})`}</p>
                                         })
                                     }
-                                </>
+                                </div>
                             ) : <></>
                         })
                     }
