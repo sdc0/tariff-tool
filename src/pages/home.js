@@ -40,7 +40,7 @@ const Home = () => {
 
                     let c = [new Country("America", true), new Country("France", false), new Country("Britain", false)];
                     let r = [new RawMaterial("Wood"), new RawMaterial("Iron"), new RawMaterial("Copper")];
-                    let p = [new ProcessedMaterial("House", {"Wood": 3}), new ProcessedMaterial("Cars", {"Iron": 2}), new ProcessedMaterial("Elcetronics", {"Copper": 2}), new ProcessedMaterial("Furniture", {"Iron": 1, "Wood": 3}), new ProcessedMaterial("Power Lines", {"Copper": 2, "Wood": 2}), new ProcessedMaterial("Bronze", {"Copper": 1, "Iron": 2})];
+                    let p = [new ProcessedMaterial("House", {"Wood": 3}), new ProcessedMaterial("Cars", {"Iron": 2}), new ProcessedMaterial("Electronics", {"Copper": 2}), new ProcessedMaterial("Furniture", {"Iron": 1, "Wood": 3}), new ProcessedMaterial("Power Lines", {"Copper": 2, "Wood": 2}), new ProcessedMaterial("Bronze", {"Copper": 1, "Iron": 2})];
 
                     c[0].addRawMaterial(r[0].name);
                     c[1].addRawMaterial(r[1].name);

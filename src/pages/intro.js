@@ -48,6 +48,7 @@ const Intro = () => {
                         <p>The point system is just a way of simplifying the goal of trade, as it values goods that would be typically more expensive (more materials in production) and values foreign made products more (50% bonus to incentivize trade)</p>
                         <p>Tariffs were simplified to direct material taxes, which does somewhat demonstrate the advantages of them, with differing harvest costs being offset by tariffs</p>
                     </div>
+                    <h3>Also, really important, for the accepting of trades from other countries react was being garbage so checkboxes don't work for some reason. If you click the box it should still toggle, but just in case, you can open the developer console from browser options (three dots -> more tools -> developer tools, select console) and the value will log there</h3>
                 </div>
             </div>
             <div style={{display: "flex", width: "100%", justifyContent: "center", alignItems: "center"}}>

@@ -239,7 +239,8 @@ const Game = () => {
                                                             e.preventDefault();
 
                                                             trade.accepted = !trade.accepted;
-                                                            e.target.checked = trade.accepted;
+
+                                                            console.log(trade.accepted);
                                                         }} checked={trade.accepted} />
                                                     </div>
                                                 ) : <></>;
@@ -287,12 +288,6 @@ const Game = () => {
                                                 });
 
                                                 let cc = Country.clone(countries.find((c) => c.name === trade.paying_country));
-                                                console.log(cc);
-                                                console.log(mc);
-                                                console.log(materials);
-                                                console.log(cc.currency >= trade.value);
-                                                console.log(trade);
-                                                console.log(Object.entries(trade.materials).map(([material, amount]) => materials[material] >= amount))
 
                                                 if (cc.currency >= trade.value && Object.entries(trade.materials).map(([material, amount]) => materials[material] >= amount).every(Boolean)) {
                                                     trade.accepted = true;
