@@ -32,6 +32,7 @@ function ProcMaterialHarvestForm() {
 
     function parseForm() {
         let req = sumProduced();
+        console.log(req);
 
         let mats = {};
 
@@ -58,26 +59,29 @@ function ProcMaterialHarvestForm() {
         // eslint-disable-next-line
         Object.entries(req).map(([m, amount]) => {
             let leftover = amount;
+            console.log(leftover);
 
-            if (m in playerCountry.held_foreign_raw && leftover > 0) {
-                if (playerCountry.held_foreign_raw[m] > leftover) {
-                    playerCountry.held_foreign_raw[m] -= leftover;
+            if (m in c.held_foreign_raw && leftover > 0) {
+                if (c.held_foreign_raw[m] > leftover) {
+                    c.held_foreign_raw[m] = c.held_foreign_raw[m] - leftover;
                     leftover = 0;
                 }else {
-                    leftover -= playerCountry.held_foreign_raw[m];
-                    playerCountry.held_foreign_raw[m] = 0;
+                    leftover = leftover - c.held_foreign_raw[m];
+                    c.held_foreign_raw[m] = 0;
                 }
             }
+            console.log(leftover);
 
-            if (m in playerCountry.held_domestic_raw && leftover > 0) {
-                if (playerCountry.held_domestic_raw[m] > leftover) {
-                    playerCountry.held_domestic_raw[m] -= leftover;
+            if (m in c.held_domestic_raw && leftover > 0) {
+                if (c.held_domestic_raw[m] > leftover) {
+                    c.held_domestic_raw[m] = c.held_domestic_raw[m] - leftover;
                     leftover = 0;
                 }else {
-                    leftover -= playerCountry.held_domestic_raw[m];
-                    playerCountry.held_domestic_raw[m] = 0;
+                    leftover -= c.held_domestic_raw[m];
+                    c.held_domestic_raw[m] = 0;
                 }
             }
+            console.log(leftover);
         });
 
         // eslint-disable-next-line
