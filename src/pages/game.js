@@ -424,7 +424,10 @@ const Game = () => {
                                         setTrades({});
 
                                         console.log(g);
-                                        if (g.phase === "end") nav("/game/end");
+                                        if (g.phase === "end") {
+                                            nav("/game/end");
+                                            return;
+                                        }
                                         nav("/game");
                                     }}>Click to Continue to Next Turn</button>
                                 </div>
