@@ -29,7 +29,7 @@ export class GameState {
 export const GameStateContext = createContext();
 
 export const GameStateProvider = ({ children }) => {
-    const [state, setState] = useState(new GameState(1, 3, "production", 10));
+    const [state, setState] = useState(new GameState(1, 10, "production", 20));
 
     return (
         <GameStateContext.Provider value={{ state, setState }}>
