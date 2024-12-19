@@ -426,9 +426,11 @@ const Game = () => {
                                         console.log(g);
                                         if (g.phase === "end") {
                                             nav("/game/end");
+                                            console.log("ending game");
                                             return;
+                                        }else {
+                                            nav("/game");
                                         }
-                                        nav("/game");
                                     }}>Click to Continue to Next Turn</button>
                                 </div>
                             </>
@@ -449,11 +451,11 @@ const Game = () => {
                                             num_materials += a;
                                         });
 
-                                        points += num_materials;
+                                        points += num_materials * amount;
                                     });
 
                                     // eslint-disable-next-line
-                                    Object.entries(c.held_domestic_processed).map(([mat, amount]) => {
+                                    Object.entries(c.held_foreign_processed).map(([mat, amount]) => {
                                         let num_materials = 0;
 
                                         // eslint-disable-next-line
@@ -461,7 +463,7 @@ const Game = () => {
                                             num_materials += a;
                                         });
 
-                                        points += Math.floor(num_materials * 1.5);
+                                        points += Math.floor(num_materials * 1.5) * amount;
                                     });
 
                                     return (
